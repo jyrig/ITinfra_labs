@@ -1,0 +1,50 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+
+
+  tasks:
+    - name: install apache2 and php
+      apt: 
+        name: ['apache2','php'] 
+        force: yes
+        state: latest 
+        cache_valid_time: 3600 
+        update_cache: yes
+
+    - name: configure apache via template
+      template:
+        dest: /etc/apache2/sites-available/000-default.conf
+        src: 000-default.conf 
+        owner: root
+        group: root
+        mode: 0640
+      notify:
+        - restart apache2 
+
+    - name: configure apache ports
+      template:
+        dest: /etc/apache2/ports.conf
+        src: ports.conf
+        owner: root
+        group: root
+        mode: 0640
+      notify:
+        - restart apache2
+
+    - name: create phpinfo
+      template:
+        dest: /var/www/html/phpinfo.php
+        src: phpinfo.php
+        owner: root
+        group: root
+        mode: 0644
+      notify:
+        - restart apache2
+
+  handlers:
+    - name: restart apache2
+      service:
+        name: apache2
+        state: restarted
