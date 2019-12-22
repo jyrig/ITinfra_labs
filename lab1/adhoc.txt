@@ -1,0 +1,109 @@
+jg@management:~/ITinfra_labs/lab1$ ansible all -i inventory -m ping -l node0
+node0 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+jg@management:~/ITinfra_labs/lab1$ ansible all -i inventory -m shell -a "ps aux" -l node0
+node0 | CHANGED | rc=0 >>
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.3  0.8 159728  9028 ?        Ss   13:12   0:01 /sbin/init maybe-ubiquity
+root         2  0.0  0.0      0     0 ?        S    13:12   0:00 [kthreadd]
+root         4  0.0  0.0      0     0 ?        I<   13:12   0:00 [kworker/0:0H]
+root         6  0.0  0.0      0     0 ?        I<   13:12   0:00 [mm_percpu_wq]
+root         7  0.0  0.0      0     0 ?        S    13:12   0:00 [ksoftirqd/0]
+root         8  0.0  0.0      0     0 ?        I    13:12   0:00 [rcu_sched]
+root         9  0.0  0.0      0     0 ?        I    13:12   0:00 [rcu_bh]
+root        10  0.0  0.0      0     0 ?        S    13:12   0:00 [migration/0]
+root        11  0.0  0.0      0     0 ?        S    13:12   0:00 [watchdog/0]
+root        12  0.0  0.0      0     0 ?        S    13:12   0:00 [cpuhp/0]
+root        13  0.0  0.0      0     0 ?        S    13:12   0:00 [kdevtmpfs]
+root        14  0.0  0.0      0     0 ?        I<   13:12   0:00 [netns]
+root        15  0.0  0.0      0     0 ?        S    13:12   0:00 [rcu_tasks_kthre]
+root        16  0.0  0.0      0     0 ?        S    13:12   0:00 [kauditd]
+root        17  0.0  0.0      0     0 ?        S    13:12   0:00 [khungtaskd]
+root        18  0.0  0.0      0     0 ?        S    13:12   0:00 [oom_reaper]
+root        19  0.0  0.0      0     0 ?        I<   13:12   0:00 [writeback]
+root        20  0.0  0.0      0     0 ?        S    13:12   0:00 [kcompactd0]
+root        21  0.0  0.0      0     0 ?        SN   13:12   0:00 [ksmd]
+root        22  0.0  0.0      0     0 ?        SN   13:12   0:00 [khugepaged]
+root        23  0.0  0.0      0     0 ?        I<   13:12   0:00 [crypto]
+root        24  0.0  0.0      0     0 ?        I<   13:12   0:00 [kintegrityd]
+root        25  0.0  0.0      0     0 ?        I<   13:12   0:00 [kblockd]
+root        26  0.0  0.0      0     0 ?        I<   13:12   0:00 [ata_sff]
+root        27  0.0  0.0      0     0 ?        I<   13:12   0:00 [md]
+root        28  0.0  0.0      0     0 ?        I<   13:12   0:00 [edac-poller]
+root        29  0.0  0.0      0     0 ?        I<   13:12   0:00 [devfreq_wq]
+root        30  0.0  0.0      0     0 ?        I<   13:12   0:00 [watchdogd]
+root        31  0.0  0.0      0     0 ?        I    13:12   0:00 [kworker/u2:1]
+root        32  0.0  0.0      0     0 ?        I    13:12   0:00 [kworker/0:1]
+root        34  0.0  0.0      0     0 ?        S    13:12   0:00 [kswapd0]
+root        35  0.0  0.0      0     0 ?        I<   13:12   0:00 [kworker/u3:0]
+root        36  0.0  0.0      0     0 ?        S    13:12   0:00 [ecryptfs-kthrea]
+root        78  0.0  0.0      0     0 ?        I<   13:12   0:00 [kthrotld]
+root        79  0.0  0.0      0     0 ?        I<   13:12   0:00 [acpi_thermal_pm]
+root        80  0.0  0.0      0     0 ?        S    13:12   0:00 [scsi_eh_0]
+root        81  0.0  0.0      0     0 ?        I<   13:12   0:00 [scsi_tmf_0]
+root        82  0.0  0.0      0     0 ?        S    13:12   0:00 [scsi_eh_1]
+root        83  0.0  0.0      0     0 ?        I<   13:12   0:00 [scsi_tmf_1]
+root        84  0.0  0.0      0     0 ?        I    13:12   0:00 [kworker/u2:2]
+root        85  0.0  0.0      0     0 ?        I    13:12   0:00 [kworker/u2:3]
+root        89  0.0  0.0      0     0 ?        I<   13:12   0:00 [ipv6_addrconf]
+root        98  0.0  0.0      0     0 ?        I<   13:12   0:00 [kstrp]
+root       115  0.0  0.0      0     0 ?        I<   13:12   0:00 [charger_manager]
+root       156  0.0  0.0      0     0 ?        I    13:12   0:00 [kworker/0:2]
+root       191  0.0  0.0      0     0 ?        I<   13:12   0:00 [kworker/0:1H]
+root       207  0.0  0.0      0     0 ?        S    13:12   0:00 [scsi_eh_2]
+root       208  0.0  0.0      0     0 ?        I<   13:12   0:00 [scsi_tmf_2]
+root       209  0.0  0.0      0     0 ?        I<   13:12   0:00 [ttm_swap]
+root       210  0.0  0.0      0     0 ?        S    13:12   0:00 [irq/18-vmwgfx]
+root       276  0.0  0.0      0     0 ?        I<   13:12   0:00 [raid5wq]
+root       328  0.0  0.0      0     0 ?        S    13:12   0:00 [jbd2/sda2-8]
+root       329  0.0  0.0      0     0 ?        I<   13:12   0:00 [ext4-rsv-conver]
+root       393  0.0  1.6 127588 16932 ?        S<s  13:12   0:00 /lib/systemd/systemd-journald
+root       394  0.0  0.0      0     0 ?        I<   13:12   0:00 [iscsi_eh]
+root       403  0.0  0.1  97708  1900 ?        Ss   13:12   0:00 /sbin/lvmetad -f
+root       408  0.0  0.0      0     0 ?        I<   13:12   0:00 [ib-comp-wq]
+root       409  0.0  0.0      0     0 ?        I<   13:12   0:00 [ib_mcast]
+root       410  0.0  0.0      0     0 ?        I<   13:12   0:00 [ib_nl_sa_wq]
+root       413  0.0  0.4  45948  4944 ?        Ss   13:12   0:00 /lib/systemd/systemd-udevd
+root       415  0.0  0.0      0     0 ?        I<   13:12   0:00 [rdma_cm]
+root       460  0.0  0.0      0     0 ?        S<   13:12   0:00 [loop0]
+root       463  0.0  0.0      0     0 ?        S<   13:12   0:00 [loop1]
+systemd+   466  0.0  0.3 141928  3184 ?        Ssl  13:12   0:00 /lib/systemd/systemd-timesyncd
+root       507  0.0  0.0      0     0 ?        I<   13:12   0:00 [iprt-VBoxWQueue]
+systemd+   683  0.0  0.6  80172  6076 ?        Ss   13:12   0:00 /lib/systemd/systemd-networkd
+systemd+   707  0.0  0.6  71124  6432 ?        Ss   13:12   0:00 /lib/systemd/systemd-resolved
+message+   769  0.0  0.4  50056  4528 ?        Ss   13:12   0:00 /usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+syslog     770  0.0  0.4 263036  4464 ?        Ssl  13:12   0:00 /usr/sbin/rsyslogd -n
+root       772  0.0  1.7 169096 17236 ?        Ssl  13:12   0:00 /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
+root       774  0.0  0.5  70588  6024 ?        Ss   13:12   0:00 /lib/systemd/systemd-logind
+root       781  0.0  0.3  30028  3244 ?        Ss   13:12   0:00 /usr/sbin/cron -f
+root       784  0.0  0.7 286516  7216 ?        Ssl  13:12   0:00 /usr/lib/accountsservice/accounts-daemon
+root       785  0.0  0.1  95540  1616 ?        Ssl  13:12   0:00 /usr/bin/lxcfs /var/lib/lxcfs/
+daemon     819  0.0  0.2  28332  2516 ?        Ss   13:12   0:00 /usr/sbin/atd -f
+root       858  0.1  2.5 631960 25436 ?        Ssl  13:12   0:00 /usr/lib/snapd/snapd
+root       882  0.0  0.6 288880  6464 ?        Ssl  13:12   0:00 /usr/lib/policykit-1/polkitd --no-debug
+root       883  0.0  2.0 185944 20300 ?        Ssl  13:12   0:00 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+root       900  0.0  0.1  14888  1972 tty1     Ss+  13:12   0:00 /sbin/agetty -o -p -- \u --noclear tty1 linux
+root       939  0.0  0.5  72296  5820 ?        Ss   13:12   0:00 /usr/sbin/sshd -D
+root       997  0.0  1.6 327132 16480 ?        Ss   13:12   0:00 /usr/sbin/apache2 -k start
+www-data  1001  0.0  0.8 331536  8912 ?        S    13:12   0:00 /usr/sbin/apache2 -k start
+www-data  1002  0.0  0.8 331536  8912 ?        S    13:12   0:00 /usr/sbin/apache2 -k start
+www-data  1003  0.0  0.8 331536  8912 ?        S    13:12   0:00 /usr/sbin/apache2 -k start
+www-data  1004  0.0  0.8 331536  8912 ?        S    13:12   0:00 /usr/sbin/apache2 -k start
+www-data  1005  0.0  0.8 331536  8912 ?        S    13:12   0:00 /usr/sbin/apache2 -k start
+root      1535  0.0  0.7 107984  7196 ?        Ss   13:15   0:00 sshd: jg [priv]
+jg        1537  0.0  0.6  76644  6928 ?        Ss   13:15   0:00 /lib/systemd/systemd --user
+jg        1538  0.0  0.2 193712  2416 ?        S    13:15   0:00 (sd-pam)
+jg        1627  0.0  0.3 107984  3488 ?        S    13:15   0:00 sshd: jg@pts/0
+jg        1628  0.0  0.5  21492  5092 pts/0    Ss+  13:15   0:00 -bash
+root      1748  0.0  0.7 107984  7224 ?        Ss   13:18   0:00 sshd: jg [priv]
+jg        1829  0.0  0.5 108432  5204 ?        S    13:18   0:00 sshd: jg@pts/1
+jg        1923  0.0  0.0   4628   756 pts/1    Ss+  13:19   0:00 /bin/sh -c /usr/bin/python3 /home/jg/.ansible/tmp/ansible-tmp-1577020773.11-206421737621016/AnsiballZ_command.py && sleep 0
+jg        1924  0.0  1.8  75620 18676 pts/1    S+   13:19   0:00 /usr/bin/python3 /home/jg/.ansible/tmp/ansible-tmp-1577020773.11-206421737621016/AnsiballZ_command.py
+jg        1926  0.0  0.0   4628   780 pts/1    S+   13:19   0:00 /bin/sh -c ps aux
+jg        1927  0.0  0.3  38372  3592 pts/1    R+   13:19   0:00 ps aux
+
