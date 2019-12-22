@@ -1,17 +1,27 @@
 ---
 - hosts: all
-  gather_facts: no
+  gather_facts: yes 
   become: yes
 
 
   tasks:
+
+    - name: Pin apache package
+      copy:
+        dest: /etc/apt/preferences.d/apache
+        content: |
+          Package: apache2
+          Pin: version 2.4
+          Pin-Priority: 1001
+
     - name: install apache2 and php
-      apt: 
-        name: ['apache2','php'] 
+      apt:
+        name: ['apache2','php']
         force: yes
-        state: latest 
-        cache_valid_time: 3600 
+        state: latest
+        cache_valid_time: 3600
         update_cache: yes
+
 
     - name: configure apache via template
       template:
