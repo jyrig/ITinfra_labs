@@ -1,0 +1,55 @@
+---
+
+- hosts: all
+  become: yes
+ 
+  vars:
+    admin:
+      - name: jg
+        comment: admin
+    teachers:
+      - name: romankuchin
+        comment: teacher
+      - name: hudolejev
+        comment: teacher
+
+ 
+  tasks:
+    - name: Deploy admin user
+      user:
+        name={{item.name}}
+        comment="{{item.comment}}"
+        groups={{item.name}}
+        shell="/bin/bash"
+      with_items: "{{ admin }}"
+   
+    - name: deploy ssh keys for admin
+      authorized_key:
+        user: "jg"
+        state: present
+        key: https://github.com/jyrig.keys
+        validate_certs: False
+
+    - name: Ensure that sudo is allowed without password 
+      lineinfile: "dest=/etc/sudoers line='{{item.name}} ALL=(ALL) NOPASSWD: ALL'"
+      with_items: "{{ admin }}"
+
+    - name: Create sysadmins group
+      group:
+        name=sysadmins
+        state=present
+
+    - name: Deploy teacher users
+      user:
+        name={{item.name}}
+        comment="{{item.comment}}"
+        groups=sysadmins
+        shell="/bin/bash"
+      with_items: "{{ teachers }}"
+   
+    - name: deploy ssh keys for teachers
+      authorized_key:
+        user: "{{item.name}}"
+        key: https://github.com/{{item.name}}.keys 
+      with_items: "{{ teachers }}"
+
