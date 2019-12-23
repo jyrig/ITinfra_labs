@@ -1,0 +1,65 @@
+---
+- hosts: frontend_servers 
+  gather_facts: yes 
+  become: yes
+
+
+  tasks:
+
+    - name: install apache2 + php + mysql module + wordpress
+      apt:
+        name: ['apache2','php', 'php7.2-mysql', 'wordpress']
+        force: yes
+        state: latest
+        cache_valid_time: 3600
+        update_cache: yes
+
+    - name: configure wordpress
+      template:
+        dest: /etc/apache2/sites-available/000-default.conf
+        src: 000-default.conf
+        owner: root
+        group: root
+        mode: 0644
+      notify:
+        - restart apache2
+
+    - name: configure wordpress db strings
+      template:
+        dest: /etc/wordpress/config-localhost.php
+        src: config-localhost.php.j2
+        owner: root
+        group: root
+        mode: 0644
+    
+  handlers:
+    - name: restart apache2
+      service:
+        name: apache2
+        state: restarted
+
+- hosts: database_servers
+  gather_facts: yes
+  become: yes
+  
+  tasks:
+    - name: install mysql
+      apt:
+        name: ['mysql-server']
+        force: yes
+        state: latest
+        cache_valid_time: 3600
+        update_cache: yes
+
+    - name: add wordpress database
+      copy:
+        src: wordpress.sql
+        dest: /tmp
+      notify:
+        - exec sql
+
+  handlers:
+    - name: exec sql 
+      shell:
+        cmd: cat /tmp/wordpress.sql | mysql --defaults-extra-file=/etc/mysql/debian.cnf && rm /tmp/wordpress.sql
+
