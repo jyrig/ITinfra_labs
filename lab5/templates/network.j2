@@ -1,0 +1,11 @@
+---
+
+network:
+    ethernets:
+        enp0s3:
+            dhcp4: true
+        enp0s8:
+            dhcp4: no
+            addresses: [{% if dns_role == "master" %}{{192.168.1.2}}{% else %}{{192.168.1.3}}/24]
+{% endif %}
+    version: 2

@@ -1,0 +1,3 @@
+[dns]
+infra01 ansible_host=192.168.1.2
+infra02 ansible_host=192.168.1.3

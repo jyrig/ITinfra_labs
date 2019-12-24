@@ -1,0 +1,16 @@
+$TTL    604800
+@       IN      SOA     itinfra. root.itinfra. (
+                             {{ ansible_date_time.epoch }}         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+{{NS1}}
+{{NS2}}
+{{AR1}}
+{{AR2}}
+{{AR3}}
+{{AR4}}
+{{CNAME1}}
+{{CNAME2}}
