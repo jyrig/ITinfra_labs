@@ -7,12 +7,14 @@ localnets:
   - 192.168.1.0/24
   - 10.0.2.0/24
   - localhost
-NS1: 'infra.                IN      NS      infra01.itinfra.'
-NS2: 'infra.                IN      NS      infra02.itinfra.'
-AR1: 'infra01.itinfra.        IN      A       192.168.1.2'
-AR2: 'infra02.itinfra.        IN      A       192.168.1.3'
+NS1: '@                IN      NS      node0.itinfra.'
+NS2: '@                IN      NS      node1.itinfra.'
+AR1: 'node0.itinfra.        IN      A       192.168.1.2'
+AR2: 'node1.itinfra.        IN      A       192.168.1.3'
 AR3: 'ns        IN      A       192.168.1.2'
 AR4: 'ns        IN      A       192.168.1.3'
-CNAME1: 'ns1.itinfra.    CNAME infra01.itinfra.'
-CNAME2: 'ns2.itinfra.    CNAME infra02.itinfra.'
+AR5: 'node0        IN      A       192.168.1.2'
+AR6: 'node1        IN      A       192.168.1.3'
+CNAME1: 'ns1.itinfra.    CNAME node0.itinfra.'
+CNAME2: 'ns2.itinfra.    CNAME node1.itinfra.'
 

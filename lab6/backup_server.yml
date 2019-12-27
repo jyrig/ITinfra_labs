@@ -1,0 +1,34 @@
+---
+- hosts: VM2
+  become: yes
+
+
+  tasks:
+
+    - name: create backup user
+      user: name=backup shell=/usr/sbin/nologin group=backup system=yes create_home=True
+
+    - name: create required directories
+      file:
+        path: /var/backups/.ssh/
+        state: directory
+        owner: 'backup'
+        group: 'backup'
+        mode:  '0700'
+
+    - name: deploy ssh keys
+      copy:
+        src=backup.pub
+        dest=/var/backups/.ssh/authorized_keys
+        owner=backup
+        group=backup
+        mode=0600
+
+    - name: create srv/backup directory
+      file:
+        path: /srv/backup
+        state: directory
+        recurse: yes
+        owner: 'backup'
+        group: 'backup'
+        mode:  '0700'

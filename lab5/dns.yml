@@ -8,6 +8,11 @@
         name: systemd-resolved
         state: stopped
         enabled: no
+   
+    - name: cleanup symlink
+      file:
+        path: "/etc/resolv.conf"
+        state: absent
 
   handlers:
     - name: netplan apply
@@ -18,8 +23,14 @@
   become: yes
   gather_facts: yes
   tasks:
+    
+    - name: create resolv.conf
+      file:
+       path: /etc/resolv.conf
+       state: touch 
+       mode: 0644
 
-    - name: ensure that apt can resolve
+    - name: add nodes to resolv 
       lineinfile:
         path: /etc/resolv.conf 
         state: present
@@ -52,7 +63,6 @@
       template:
         src: templates/db.j2
         dest: /etc/bind/db
-      when: dns_role == "master"
       notify:
         - bind reload db
   
@@ -60,7 +70,6 @@
       template:
         src: templates/db.ptr.j2
         dest: /etc/bind/db.ptr
-      when: dns_role == "master"
       notify:
         - bind reload db
 

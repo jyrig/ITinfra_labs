@@ -6,7 +6,9 @@ $TTL	604800
 			2419200		; Expire
 			 604800 )	; Negative Cache TTL
 ;
-	IN	NS	infra01.itinfra.
-	IN	NS	infra02.itinfra.
-102	IN	PTR	infra01.itinfra.
-103	IN	PTR	infra02.itinfra.
+	IN	NS	node0.itinfra.
+	IN	NS	node1.itinfra.
+2       IN      PTR     node0
+3       IN      PTR     node1
+2	IN	PTR	node0.itinfra.
+3	IN	PTR	node1.itinfra.
