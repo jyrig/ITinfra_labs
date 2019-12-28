@@ -1,1 +1,3 @@
+*.sql filter=git-crypt diff=git-crypt
+backup_wp_db.sh filter=git-crypt diff=git-crypt
 *.key filter=git-crypt diff=git-crypt

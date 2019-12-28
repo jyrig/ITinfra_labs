@@ -1,32 +1,75 @@
 ---
-- hosts: VM1 
+- hosts: node0 
   become: yes
 
   tasks:
     - name: create backup user
-      user: name=backup shell=/usr/sbin/nologin group=backup system=yes
+      user: name=backup shell=/bin/bash group=backup system=yes
    
     - name: create required directories
       file:
-        path: /var/backups/.ssh
+        path: "{{ item  }}"
         state: directory
         owner: backup
         group: backup
         mode:  '0700'
+      with_items:
+        - /var/backups/.ssh
+        - /var/backup
+
 
     - name: deploy ssh keys
       copy:
-        src=backup.pub
-        dest=/var/backups/.ssh/authorized_keys
-        owner=backup
-        group=backup
-        mode=0600
+        src: backup.pub
+        dest: "{{ item }}"
+        owner: backup
+        group: backup
+        mode: 0600
+      with_items:
+        - /var/backups/.ssh/authorized_keys
+        - /home/backup/.ssh/authorized_keys
 
     - name: deploy ssh keys
       copy:
-        src=backup.key
-        dest=/var/backups/.ssh/id_rsa
-        owner=backup
-        group=backup
-        mode=0700
+        src: backup.key
+        dest: /var/backups/.ssh/id_rsa
+        owner: backup
+        group: backup
+        mode: 0700
+   
+    - name:
+      copy:
+        src: backup_wp_db.sh
+        dest: /home/backup/
+        owner: backup
+        group: backup
+        mode: 0700
 
+    - name: Install service backup cron
+      cron:
+        name: service backups
+        job: "{{ item }}"
+        hour: "{{ 5 | random }}"
+        minute: "{{ 59 | random }}"
+        user: backup
+        cron_file: service_backups 
+      with_items:
+        - "tar czvf bind.tgz /etc/bind && chown backup:backup /var/backup/bind.tgz"
+        - "/home/backup/backup_wp_db.sh"
+
+    - name: Install service backup departure cron
+      cron:
+        name: backups departure
+        job: "{{ item }}"
+        hour: "{{ 5 | random }}"
+        minute: "{{ 59 | random }}"
+        user: backup 
+        cron_file: backups_departure
+      with_items:
+        - "duplicity incremental /var/backup rsync://backup@node1://srv/backup --archive-dir /var/backup/cache/ --name backup --no-encryption && duplicity remove-older-than 3M --force rsync://backup@node1//srv/backup"
+      notify:
+        - initial full
+
+  handlers:
+    - name: initial full
+      shell: runuser -l backup -c "duplicity full /var/backup rsync://backup@node1//srv/backup --archive-dir /home/backup/cache/ --name backup --no-encryption"

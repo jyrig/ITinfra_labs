@@ -1,12 +1,12 @@
 ---
-- hosts: VM2
+- hosts: node1 
   become: yes
 
 
   tasks:
 
     - name: create backup user
-      user: name=backup shell=/usr/sbin/nologin group=backup system=yes create_home=True
+      user: name=backup shell=/bin/bash group=backup system=yes create_home=True
 
     - name: create required directories
       file:
@@ -20,6 +20,14 @@
       copy:
         src=backup.pub
         dest=/var/backups/.ssh/authorized_keys
+        owner=backup
+        group=backup
+        mode=0600
+
+    - name: deploy ssh keys
+      copy:
+        src=backup.pub
+        dest=/home/backup/.ssh/authorized_keys
         owner=backup
         group=backup
         mode=0600
