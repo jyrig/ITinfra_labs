@@ -1,0 +1,9 @@
+---
+- hosts: all
+  become: yes
+  roles:
+    - { role: init }
+    - { role: bind }
+    - { role: node_exporter }
+    - { role: prometheus, when: inventory_hostname_short=="node0", tags: [prometheus]}
+

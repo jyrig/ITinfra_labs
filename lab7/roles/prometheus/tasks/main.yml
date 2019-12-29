@@ -1,0 +1,59 @@
+---
+- group:
+    name: prometheus
+    state: present
+
+- name: Create prometheus user
+  user: name=prometheus shell=/usr/sbin/nologin group=prometheus system=yes
+
+- name: Download
+  get_url:
+    url: https://github.com/prometheus/prometheus/releases/download/v{{ item }}/prometheus-{{ item }}.linux-amd64.tar.gz
+    dest: /opt/prometheus-{{ item }}.linux-amd64.tar.gz
+  with_items:
+    - "{{version}}"
+
+- name: folder
+  file:
+    path: /opt/prometheus
+    state: directory
+    owner: prometheus
+    group: prometheus
+    mode: '0755'
+
+- name: Check that the file exists
+  stat:
+    path: /opt/prometheus/prometheus.yml
+  register: stat_result
+
+- name: untar
+  unarchive:
+    src: /opt/prometheus-{{ item }}.linux-amd64.tar.gz
+    dest: /opt/prometheus
+    remote_src: yes
+    extra_opts:
+      - --strip-components=1
+  when:
+    - stat_result.stat.exists == False
+  with_items:
+    - "{{version}}"
+
+- name: config prometheus
+  template:
+    src: prometheus.yaml.j2
+    dest: /opt/prometheus/prometheus.yml
+  notify:
+    - restart prometheus
+
+- name: systemd prometheus
+  template:
+    src: prometheus.service.j2
+    dest: /etc/systemd/system/prometheus.service
+  notify:
+    - restart systemd
+
+- name: start prometheus
+  service:
+    name: prometheus
+    state: started
+    enabled: yes
