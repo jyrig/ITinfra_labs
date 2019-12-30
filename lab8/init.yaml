@@ -1,0 +1,9 @@
+---
+- hosts: all
+  become: yes
+  roles:
+    - { role: init }
+    - { role: bind }
+    - { role: grafana, when: inventory_hostname_short=="node0", tags: [grafana] }
+    - { role: influxdb, when: inventory_hostname_short=="node1", tags: [influxdb] }
+    - { role: logging, when: inventory_hostname_short=="node1", tags: [logging] }

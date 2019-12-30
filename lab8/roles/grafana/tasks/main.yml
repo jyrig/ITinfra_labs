@@ -1,0 +1,56 @@
+---
+- group:
+    name: grafana
+    state: present
+
+- name: Create grafana user
+  user: name=grafana shell=/usr/sbin/nologin group=grafana system=yes
+
+- name: check grafana file
+  stat:
+    path: /opt/grafana-6.5.2.linux-amd64.tar.gz 
+  register: stat_file
+  
+
+- name: Download grafana
+  get_url:
+    url: https://dl.grafana.com/oss/release/grafana-6.5.2.linux-amd64.tar.gz
+    dest: /opt/grafana-6.5.2.linux-amd64.tar.gz
+  when: stat_file.stat.exists == False
+
+- name: folder
+  file:
+    path: /opt/grafana
+    state: directory
+    owner: grafana
+    group: grafana
+    mode: '0755'
+
+- name: Check that the file exists
+  stat:
+    path: /opt/grafana/bin/grafana-server
+  register: stat_result
+
+- name: untar
+  unarchive:
+    src: /opt/grafana-6.5.2.linux-amd64.tar.gz
+    dest: /opt/grafana
+    remote_src: yes
+    extra_opts:
+      - --strip-components=1
+  when:
+    - stat_result.stat.exists == False
+
+- name: systemd grafana
+  template:
+    src: grafana-server.service.j2
+    dest: /etc/systemd/system/grafana-server.service
+  notify:
+    - restart systemd
+
+- name: start grafana
+  service:
+    name: grafana-server
+    state: started
+    enabled: yes
+
