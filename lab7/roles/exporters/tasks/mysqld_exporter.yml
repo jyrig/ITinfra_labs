@@ -1,0 +1,53 @@
+---
+- group:
+    name: exporters
+    state: present
+
+- name: Create mysqld_exporter user
+  user: name=mysql_exporter shell=/usr/sbin/nologin group=exporters system=yes
+
+- name: Check that the file exists
+  stat:
+    path: /opt/mysqld_exporter-0.12.1.linux-amd64.tar.gz
+  register: stat_result
+
+- name: Download
+  get_url:
+    url: https://github.com/prometheus/mysqld_exporter/releases/download/v0.12.1/mysqld_exporter-0.12.1.linux-amd64.tar.gz
+    dest: /opt/
+  when: stat_result.stat.exists == False
+
+- name: folder
+  file:
+    path: /opt/mysqld_exporter
+    state: directory
+    mode: '0755'
+
+- name: untar
+  unarchive:
+    src: /opt/mysqld_exporter-0.12.1.linux-amd64.tar.gz
+    dest: /opt/mysqld_exporter
+    remote_src: yes
+    extra_opts:
+      - --strip-components=1
+
+- name: systemd mysqld_exporter
+  template:
+    src: mysqld_exporter.service.j2
+    dest: /etc/systemd/system/mysqld_exporter.service
+
+- name: deploy ssh keys
+  copy:
+    src: my.cnf
+    dest: /home/mysql_exporter/.my.cnf
+    owner: mysql_exporter 
+    group: exporters
+    mode: 0600
+
+
+
+- name: start exporter
+  service:
+    name: mysqld_exporter
+    state: started
+    enabled: yes

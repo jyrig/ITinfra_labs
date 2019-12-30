@@ -1,0 +1,9 @@
+[Unit]
+Description=Apache Exporter
+
+[Service]
+User=apache_exporter
+ExecStart=/opt/apache_exporter/apache_exporter
+
+[Install]
+WantedBy=multi-user.target

@@ -4,6 +4,7 @@
   roles:
     - { role: init }
     - { role: bind }
-    - { role: node_exporter }
+    - { role: exporters }
     - { role: prometheus, when: inventory_hostname_short=="node0", tags: [prometheus]}
+    - { role: grafana, tags: [grafana] }
 

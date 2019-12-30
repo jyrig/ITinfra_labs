@@ -58,3 +58,63 @@
     dest: /etc/bind/db.ptr
   notify:
     - bind reload db
+
+- name: Check that go gz file exists
+  stat:
+    path: /opt/go1.13.3.linux-amd64.tar.gz    
+  register: stat_go
+
+- name: download go
+  get_url:
+    url: https://dl.google.com/go/go1.13.3.linux-amd64.tar.gz
+    dest: /opt/go1.13.3.linux-amd64.tar.gz
+  when: stat_go.stat.exists == False
+
+- name: go folder
+  file:
+    path: /opt/go
+    state: directory
+    mode: '0755'
+
+- name: untar
+  unarchive:
+    src: /opt/go1.13.3.linux-amd64.tar.gz
+    dest: /opt/go
+    remote_src: yes
+
+- name: Create a symbolic link
+  file:
+    src: /opt/go/go/bin/go
+    dest: /usr/local/bin/go
+    state: link
+
+- name: Check that the file exists
+  stat:
+    path: //go/src/github.com/digitalocean/bind_exporter/bind_exporter.go
+  register: stat_result
+
+- name: go get
+  shell: "go get github.com/digitalocean/bind_exporter"
+  when: stat_result.stat.exists == False
+
+- name: copy binary
+  copy:
+    src: /root/go/bin/bind_exporter
+    dest: /usr/local/bin/bind_exporter
+    mode: u=rwx,g=rx,o=rx
+    remote_src: yes
+
+- name: make a service
+  template:
+    src: bind_exporter.service.j2
+    dest: /etc/systemd/system/bind_exporter.service
+
+- name: start bind_exporter
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items:
+    - bind9
+    - bind_exporter
+

@@ -1,0 +1,11 @@
+---
+- group:
+    name: exporters
+    state: present
+
+- name: Include exporter tasks
+  include: "{{item}}" 
+  with_items:
+   - apache_exporter.yml 
+   - mysqld_exporter.yml
+   - node_exporter.yml

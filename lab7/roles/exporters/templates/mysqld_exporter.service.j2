@@ -1,0 +1,9 @@
+[Unit]
+Description=MySQL Exporter
+
+[Service]
+User=mysql_exporter
+ExecStart=/opt/mysqld_exporter/mysqld_exporter --config.my-cnf=/home/mysql_exporter/.my.cnf
+
+[Install]
+WantedBy=multi-user.target
