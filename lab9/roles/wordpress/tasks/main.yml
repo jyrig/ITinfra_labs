@@ -1,7 +1,7 @@
 ---
 - name: Include vars
   include_vars:
-    file: mysql_keys.yml
+    file: mysql_keys.yml 
 
 - name: Include wordpress frontend 
   include: wordpress.yml

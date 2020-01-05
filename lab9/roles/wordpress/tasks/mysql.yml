@@ -1,4 +1,9 @@
 ---
+- name: Ensure that host mysql is not running
+  service:
+    name: mysql
+    state: stopped
+
 - name: create mysql container
   docker_container:
     name: mysql
