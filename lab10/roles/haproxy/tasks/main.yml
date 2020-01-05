@@ -1,0 +1,12 @@
+---
+- name: install haproxy daemon
+  apt: name=haproxy force=yes state=latest cache_valid_time=3600 update_cache=yes
+
+- name: Configure HAProxy
+  template:
+    src: haproxy.cfg
+    dest: /etc/haproxy/haproxy.cfg
+    validate: haproxy -c -f %s
+  notify:
+    haproxy_restart
+
