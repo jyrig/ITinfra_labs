@@ -1,0 +1,25 @@
+---
+jobs:
+  - name: prometheus
+    port: 9090
+    targets:
+      - localhost
+  - name: ping
+    port: 9105
+    targets:
+      - node0.itinfra
+      - node1.itinfra
+  - name: linux
+    port: 9100
+    targets:
+      - node0.itinfra
+      - node1.itinfra
+  - name: bind
+    port: 9119
+    targets:
+      - ns1.itinfra
+      - ns2.itinfra
+version: "2.15.1"
+monitored_hosts:
+  - name: node0.itinfra
+  - name: node1.itinfra

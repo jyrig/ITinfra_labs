@@ -1,0 +1,10 @@
+---
+admin:
+- name: jg
+  comment: admin
+teachers:
+- name: romankuchin
+  comment: teacher
+- name: hudolejev
+  comment: teacher
+

@@ -1,0 +1,9 @@
+---
+- hosts: all
+  become: yes
+  roles:
+          - { role: init, tags: ["init"] }
+          - { role: docker, tags: ["docker"] }
+          - { role: wordpress, tags: ["wordpress"] }
+          - { role: grafana, when: inventory_hostname_short=="node1" ,tags: ["grafana"] }
+          - { role: prometheus, when: inventory_hostname_short=="node0" ,tags: ["prometheus"] }

@@ -1,0 +1,10 @@
+[Unit]
+Description=Grafana-Server
+
+#
+[Service]
+User=grafana
+ExecStart=/opt/grafana/bin/grafana-server --homepath="/opt/grafana/"
+
+[Install]
+WantedBy=multi-user.target
