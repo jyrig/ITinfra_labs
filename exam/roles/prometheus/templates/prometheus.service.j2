@@ -1,0 +1,13 @@
+[Unit]
+Description=Prometheus
+After=network.target
+
+#
+[Service]
+User=prometheus
+Restart=always
+RestartSec=3
+ExecStart=/opt/prometheus/prometheus --config.file=/opt/prometheus/prometheus.yml --storage.tsdb.path=/home/prometheus/data/
+
+[Install]
+WantedBy=multi-user.target

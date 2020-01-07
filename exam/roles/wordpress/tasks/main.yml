@@ -1,0 +1,12 @@
+---
+- name: Include vars
+  include_vars:
+    file: mysql_keys.yml
+
+- name: Include wordpress frontend 
+  include: wordpress.yml
+  when: inventory_hostname_short=="node0"
+
+- name: Include wordpress frontend
+  include: mysql.yml
+  when: inventory_hostname_short=="node1"

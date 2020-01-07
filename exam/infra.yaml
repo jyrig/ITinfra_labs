@@ -1,0 +1,14 @@
+---
+- hosts: all
+  become: yes
+  roles:
+          - { role: init, tags: ["init"] }
+          - { role: docker, tags: ["docker"] }
+          - { role: wordpress, tags: ["wordpress"] }
+          - { role: grafana, when: inventory_hostname_short=="node1" ,tags: ["grafana"] }
+          - { role: exporters, tags: ["exporters"] }
+          - { role: prometheus, when: inventory_hostname_short=="node0" ,tags: ["prometheus"] }
+          - { role: haproxy,when: inventory_hostname_short=="node0" ,tags: ["haproxy"] }
+          - { role: influxdb, when: inventory_hostname_short=="node1", tags: [influxdb] }
+          - { role: logging, when: inventory_hostname_short=="node1", tags: [logging] }
+          - { role: haproxy,when: inventory_hostname_short=="node0" ,tags: ["haproxy"] }

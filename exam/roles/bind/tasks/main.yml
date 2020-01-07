@@ -1,0 +1,60 @@
+---
+- name: systemd-resolved
+  service:
+    name: systemd-resolved
+    state: stopped
+    enabled: no
+   
+- name: cleanup symlink
+  file:
+    path: "/etc/resolv.conf"
+    state: absent
+    
+- name: create resolv.conf
+  file:
+    path: /etc/resolv.conf
+    state: touch 
+    mode: 0644
+
+- name: add nodes to resolv 
+  lineinfile:
+    path: /etc/resolv.conf 
+    state: present
+    line: '{{ item }}'
+  with_items:
+      - 'nameserver 192.168.1.2'
+      - 'nameserver 192.168.1.3'
+
+- name: dns package
+  apt:
+    package: bind9
+    
+- name: config bind
+  template:
+    src: templates/named.conf.options.j2
+    dest: /etc/bind/named.conf.options
+  notify:
+    - restart bind
+    - check conf
+
+- name: config bind.local
+  template:
+    src: templates/named.conf.local.j2
+    dest: /etc/bind/named.conf.local
+  notify:
+    - restart bind
+    - check conf
+ 
+- name: config db
+  template:
+    src: templates/db.j2
+    dest: /etc/bind/db
+  notify:
+    - bind reload db
+  
+- name: config db ptr
+  template:
+    src: templates/db.ptr.j2
+    dest: /etc/bind/db.ptr
+  notify:
+    - bind reload db

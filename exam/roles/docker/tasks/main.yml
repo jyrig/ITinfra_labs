@@ -1,0 +1,19 @@
+---
+
+- name: install docker + plugins
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "docker.io"
+    - "python-docker"
+
+- name: Determine required MySQL Python libraries.
+  set_fact:
+    deb_mysql_python_package: "{% if 'python3' in ansible_python_interpreter|default('') %}python3-mysqldb{% else %}python-mysqldb{% endif %}"
+  when: inventory_hostname_short=="node1"
+  
+- name: Ensure MySQL Python libraries are installed.
+  apt: "name={{ deb_mysql_python_package }} state=present"
+  when: inventory_hostname_short=="node1"
+

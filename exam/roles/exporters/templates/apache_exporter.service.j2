@@ -1,0 +1,13 @@
+[Unit]
+Description=Apache Exporter
+After=network.target
+
+
+[Service]
+User=apache_exporter
+Restart=always
+RestartSec=3
+ExecStart=/opt/apache_exporter/apache_exporter
+
+[Install]
+WantedBy=multi-user.target

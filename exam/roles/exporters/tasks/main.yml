@@ -1,0 +1,16 @@
+---
+- group:
+    name: exporters
+    state: present
+
+- name: Include exporter tasks
+  include: "{{item}}" 
+  with_items:
+   - apache_exporter.yml 
+   - node_exporter.yml
+
+- name: Include mysql exporter
+  include: "{{item}}"
+  with_items:
+   - mysqld_exporter.yml
+  when: inventory_hostname_short=="node1"

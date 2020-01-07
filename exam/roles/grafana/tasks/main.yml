@@ -1,0 +1,21 @@
+---
+- name: Include vars
+  include_vars:
+    file: grafana_pass.yml
+
+- name: ensure grafana port is available for container
+  service:
+    name: grafana-server
+    state: stopped
+
+- name: create Grafana container
+  docker_container:
+    name: grafana
+    image: grafana/grafana
+    state: started
+    env:
+     GF_SERVER_ROOT_URL: http://localhost:3000/
+     GF_SECURITY_ADMIN_PASSWORD: "{{ grafana_pass }}"
+    ports:
+     - "3000:3000"
+

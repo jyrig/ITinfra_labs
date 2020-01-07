@@ -1,0 +1,12 @@
+[Unit]
+Description=MySQL Exporter
+After=network.target
+
+[Service]
+User=mysql_exporter
+Restart=always
+RestartSec=3
+ExecStart=/opt/mysqld_exporter/mysqld_exporter --config.my-cnf=/home/mysql_exporter/.my.cnf
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,24 @@
+$TTL    604800
+@       IN      SOA     itinfra. root.itinfra. (
+                             {{ ansible_date_time.epoch }}         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+
+{% for record in records %}
+{% for entry in record.entries %}
+{% if 'address' in entry %}
+{{ entry.name }} IN {{ record.type }} {{ entry.address }}
+{% elif 'addresses' in entry %}
+{% for address in entry.addresses %}
+{% if loop.index == 1 %}
+{{ entry.name }} IN {{ record.type }} {{ address }}
+{% else %}
+				      IN {{ record.type }} {{ address }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endfor %}
